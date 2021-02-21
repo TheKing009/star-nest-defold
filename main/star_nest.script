@@ -1,0 +1,25 @@
+function init(self)
+	self.time = 0
+	msg.post(".", "acquire_input_focus")
+	self.max_mouse = vmath.vector3(960, 640, 0)
+
+	self.pressed = false
+end
+
+function update(self, dt)
+	self.time = self.time + dt
+
+	go.set("#model", "time", vmath.vector4(self.time))
+	self.pressed = false
+end
+
+function on_input(self, action_id, action)
+	if not action_id and self.pressed then
+		local normalized_position = vmath.vector4(action.x / self.max_mouse.x, action.y / self.max_mouse.y, 0, 0)
+		go.set("#model", "mouse", normalized_position)
+	end
+
+	if action_id == hash("touch") then
+		self.pressed = true
+	end
+end
